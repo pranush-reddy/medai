@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MedAI - Medical Diagnosis Assistant</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #4f46e5;
+            --primary-light: #6366f1;
+            --secondary: #3730a3;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --background: #f8fafc;
+            --card-bg: #ffffff;
+            --text: #1e293b;
+            --text-light: #64748b;
+            --border: #e2e8f0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 1rem 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .container {
+            max-width: 100vw;
+            margin: 0 2%;
+            padding: 2rem;
+            flex: 1;
+        }
+
+        .features {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .feature-card {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s ease;
+            border: 1px solid var(--border);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 8px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-icon {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .input-section {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 2rem;
+            border: 1px solid var(--border);
+        }
+
+        .input-section h2 {
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            text-align: center;
+        }
+
+        textarea {
+            width: 100%;
+            min-height: 200px;
+            padding: 1rem;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            resize: vertical;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            transition: border-color 0.3s;
+            resize: none;
+        }
+
+        textarea:focus {
+            outline: none;
+            border-color: var(--primary-light);
+        }
+
+        .button {
+            background-color: var(--primary);
+            color: white;
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 500;
+            transition: all 0.3s;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .button:hover {
+            background-color: var(--secondary);
+            transform: translateY(-2px);
+        }
+
+        .button:disabled {
+            background-color: var(--text-light);
+            cursor: not-allowed;
+        }
+
+        .results {
+            background: var(--card-bg);
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border);
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .results.healthy {
+            border-left: 4px solid var(--success);
+        }
+
+        .results.disease {
+            border-left: 4px solid var(--warning);
+        }
+
+        .results h2 {
+            margin-bottom: 1.5rem;
+            color: var(--primary);
+        }
+
+        .result-card {
+            margin-bottom: 1.5rem;
+        }
+
+        .result-card h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.5rem;
+        }
+
+        .confidence-meter {
+            height: 24px;
+            background: var(--border);
+            border-radius: 12px;
+            margin: 1rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .confidence-bar {
+            height: 100%;
+            background: linear-gradient(90deg, var(--primary-light), var(--primary));
+            border-radius: 12px;
+            transition: width 0.5s;
+        }
+
+        .confidence-meter span {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-weight: 500;
+            text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        }
+
+        .healthy-message {
+            background: rgba(16, 185, 129, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .healthy-message i {
+            color: var(--success);
+            font-size: 1.5rem;
+        }
+
+        .disease-info {
+            background: rgba(245, 158, 11, 0.1);
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .disease-info p {
+            margin-bottom: 0.5rem;
+        }
+
+        .explanation {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-top: 1rem;
+            font-style: italic;
+        }
+
+        .error-message {
+            color: var(--danger);
+            padding: 1rem;
+            background: rgba(239, 68, 68, 0.1);
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .loading {
+            display: none;
+            text-align: center;
+            margin: 1rem 0;
+        }
+
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            border-radius: 50%;
+            border-top: 4px solid var(--primary);
+            width: 30px;
+            height: 30px;
+            animation: spin 1s linear infinite;
+            margin: 0 auto;
+        }
+        .confidence-meter{
+            display: none;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 1rem;
+            }
+            
+            .input-section, .results {
+                padding: 1.5rem;
+            }
+        }.footer {
+            background: var(--card-bg);
+            padding: 2rem;
+            text-align: center;
+            margin-top: auto;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            text-align: left;
+        }
+
+        .footer-section h3 {
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .footer-section p {
+            color: var(--text-secondary);
+            line-height: 1.6;
+        }
+
+        .footer-links {
+            list-style: none;
+        }
+
+        .footer-links li {
+            margin-bottom: 0.5rem;
+        }
+
+        .footer-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-links a:hover {
+            color: var(--primary);
+        }
+
+        .copyright {
+            margin-top: 2rem;
+            padding-top: 1rem;
+            border-top: 1px solid var(--border);
+            color: var(--text-secondary);
+            text-align: center;
+        }#prtf{
+            text-decoration: none;
+            color: #6366f1;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <div class="header-content">
+            <h1>
+                <i class="fas fa-heartbeat"></i> MedAI
+                <small style="display: block; font-size: 1rem; font-weight: normal; margin-top: 0.5rem;">
+                    AI-Powered Medical Analysis
+                </small>
+            </h1>
+        </div>
+    </header>
+
+    <main class="container">
+        <section class="features">
+            <div class="feature-card">
+                <i class="fas fa-brain feature-icon"></i>
+                <h3>NLP Technology</h3>
+                <p>Advanced natural language processing for analyzing clinical notes and electronic health records with high accuracy.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-chart-line feature-icon"></i>
+                <h3>Real-time Analysis</h3>
+                <p>Instant processing and analysis of medical texts for quick disease prediction and risk assessment.</p>
+            </div>
+            <div class="feature-card">
+                <i class="fas fa-shield-alt feature-icon"></i>
+                <h3>Secure Processing</h3>
+                <p>Enhanced security measures to protect patient data privacy and maintain confidentiality.</p>
+            </div>
+        </section>
+        <section class="input-section" id="app">
+            <h2>Enter Medical Notes</h2>
+            <form id="diagnosisForm">
+                <textarea 
+                    id="medicalNotes" 
+                    placeholder="Enter patient medical notes, symptoms, lab results, or clinical observations..."
+                    required
+                ></textarea>
+                <button type="submit" class="button" id="analyzeBtn">
+                    <i class="fas fa-search"></i> Analyze Notes
+                </button>
+                <div class="loading" id="loadingIndicator">
+                    <div class="spinner"></div>
+                    <p>Analyzing medical notes...</p>
+                </div>
+            </form>
+        </section>
+
+        <section class="results" id="resultsSection">
+            <h2>Analysis Results</h2>
+            <div id="predictionResults"></div>
+        </section>
+    </main>
+    <footer class="footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h3>About MedAI</h3>
+                <p>MedAI is an advanced medical diagnosis support system utilizing cutting-edge NLP technology to assist in disease prediction and patient care.</p>
+            </div>
+          
+            <div class="footer-section">
+                <h3>Contact</h3>
+                <ul class="footer-links">
+                    <li><a href="#app">Service</a></li>
+                    <li><a href="/feedback">Report Issues</a></li>
+                    <li><a href="/feedback">Feedback</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class="copyright">
+            <p>Developed By :<a href="https://pranushdev.netlify.app" target="_blank" rel="noopener noreferrer" id="prtf"> Pranush Reddy</a> </p>
+
+            <p>&copy; 2025 MedAI. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.getElementById('diagnosisForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+            
+            const analyzeBtn = document.getElementById('analyzeBtn');
+            const loadingIndicator = document.getElementById('loadingIndicator');
+            const resultsSection = document.getElementById('resultsSection');
+            const predictionResults = document.getElementById('predictionResults');
+            
+            const medicalNotes = document.getElementById('medicalNotes').value.trim();
+            
+            if (!medicalNotes) {
+                predictionResults.innerHTML = `
+                    <div class="error-message">
+                        <p>Please enter medical notes to analyze</p>
+                    </div>
+                `;
+                resultsSection.style.display = 'block';
+                return;
+            }
+            
+            // Show loading state
+            analyzeBtn.disabled = true;
+            loadingIndicator.style.display = 'block';
+            resultsSection.style.display = 'none';
+            
+            try {
+                const response = await fetch('/predict', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify({ text: medicalNotes })
+                });
+                
+                if (!response.ok) {
+                    throw new Error(`Server error: ${response.status}`);
+                }
+                
+                const data = await response.json();
+                
+                if (data.error) {
+                    predictionResults.innerHTML = `
+                        <div class="error-message">
+                            <p>Error: ${data.error}</p>
+                            <p>${data.reason || ''}</p>
+                        </div>
+                    `;
+                } else {
+                    // Clear previous classes
+                    resultsSection.className = 'results';
+                    
+                    // Add appropriate class based on result
+                    if (data.is_healthy) {
+                        resultsSection.classList.add('healthy');
+                    } else {
+                        resultsSection.classList.add('disease');
+                    }
+                    
+                    predictionResults.innerHTML = `
+                        <div class="result-card">
+                            <h3>${data.predicted_disease}</h3>
+                            <div class="confidence-meter">
+                                <div class="confidence-bar" style="width: ${data.confidence * 100}%"></div>
+                                <span>${Math.round(data.confidence * 100)}% confidence</span>
+                            </div>
+                            
+                            ${data.is_healthy ? `
+                                <div class="healthy-message">
+                                    <i class="fas fa-check-circle"></i>
+                                    <div>
+                                        <p>No significant health concerns detected</p>
+                                        <p class="detail">${data.possible_effects}</p>
+                                    </div>
+                                </div>
+                            ` : `
+                                <div class="disease-info">
+                                    <p><strong>Possible Effects:</strong> ${data.possible_effects}</p>
+                                    <p><strong>Recommendation:</strong> Consult a healthcare professional for proper diagnosis and treatment.</p>
+                                </div>
+                            `}
+                            
+                            <div class="explanation">
+                                <p>Analysis note: ${data.reason}</p>
+                            </div>
+                        </div>
+                    `;
+                }
+                
+                resultsSection.style.display = 'block';
+                
+            } catch (error) {
+                console.error('Error:', error);
+                predictionResults.innerHTML = `
+                    <div class="error-message">
+                        <p>An error occurred during analysis</p>
+                        <p>${error.message}</p>
+                    </div>
+                `;
+                resultsSection.style.display = 'block';
+            } finally {
+                analyzeBtn.disabled = false;
+                loadingIndicator.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

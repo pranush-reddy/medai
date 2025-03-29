@@ -1,0 +1,116 @@
+1. Patient 1
+The patient has a history of chronic kidney disease for 5 years.
+Also suffers from hypertension and is on medication.
+Underwent dialysis twice a week due to declining kidney function.
+Requires regular blood tests to monitor creatinine levels.
+✅ Prediction: 1 (Disease Detected - Chronic Kidney Disease & Hypertension)
+
+2. Patient 2
+No previous cardiovascular disease or chronic illness.
+Has been following a healthy diet and exercise routine for years.
+Occasionally experiences mild headaches, but no other symptoms.
+Recent blood tests and ECG results are normal.
+✅ Prediction: 0 (No Disease)
+
+3. Patient 3
+Diagnosed with Type 2 Diabetes two years ago.
+Currently on insulin therapy and metformin medication.
+Has a history of obesity and high cholesterol levels.
+Regular eye and foot checkups are necessary to prevent complications.
+✅ Prediction: 1 (Disease Detected - Diabetes & High Cholesterol)
+
+4. Patient 4
+Reports mild fever, dry cough, and sore throat for three days.
+Has a history of seasonal allergies but no major illnesses.
+No difficulty breathing, but recent travel history to a flu-affected area.
+Prescribed antiviral medication and advised self-isolation.
+✅ Prediction: 1 (Disease Detected - Possible Viral Infection / Flu)
+
+5. Patient 5
+Experiences severe chest pain and breathlessness since last night.
+Family history of heart disease (father had a heart attack at 55).
+Smoker for 20 years with high cholesterol levels.
+Admitted for ECG, blood tests, and possible angioplasty.
+✅ Prediction: 1 (Disease Detected - Possible Heart Attack / Cardiovascular Disease)
+
+6. Patient 6
+Came for a routine health checkup with no complaints.
+Has a history of mild anemia but no major illnesses.
+Works a sedentary job and lacks regular physical activity.
+Advised to increase iron intake and exercise regularly.
+✅ Prediction: 0 (No Disease)
+
+7. Patient 7
+Complains of chronic headaches and occasional blurred vision.
+Has a history of high blood pressure and migraines.
+Mother and sister both suffer from neurological disorders.
+Referred for an MRI scan and neurological consultation.
+✅ Prediction: 1 (Disease Detected - Possible Neurological Disorder / Hypertension)
+
+8. Patient 8
+No chronic illness or previous hospitalizations.
+Occasionally experiences acid reflux and digestive issues.
+Recently started a new diet with high protein intake.
+Prescribed antacids and advised dietary modifications.
+✅ Prediction: 0 (No Disease)
+
+9. Patient 9
+Diagnosed with asthma during childhood.
+Uses an inhaler during asthma attacks, especially in cold weather.
+Had a hospitalization due to severe wheezing last year.
+Advised to avoid dust exposure and continue prescribed medications.
+✅ Prediction: 1 (Disease Detected - Asthma / Respiratory Condition)
+
+10. Patient 10
+Reports unexplained weight loss, fatigue, and night sweats.
+No prior history of major illnesses, but family has a history of thyroid disease.
+Recent blood work shows abnormal thyroid levels.
+Referred for endocrinology evaluation and further testing.
+✅ Prediction: 1 (Disease Detected - Possible Thyroid Disorder / Metabolic Issue)
+
+Summary of Predictions
+✅ Disease Detected (1): Patients 1, 3, 4, 5, 7, 9, 10
+✅ No Disease (0): Patients 2, 6, 8
+
+
+# Medical Text Dataset for Disease Prediction
+# Format: [Text] | [Expected Disease] | [Confidence Level] | [Clinical Notes]
+
+# High Confidence Disease Cases (90-100%)
+Patient presents with fasting blood glucose of 210 mg/dL and HbA1c of 9.2%. Reports polyuria, polydipsia, and unexplained weight loss over past 3 months. BMI 32. Family history of type 2 diabetes. | Diabetes | 0.98 | Clear diabetes markers: elevated glucose/HbA1c + classic symptoms
+65yo male with crushing substernal chest pain radiating to left arm, diaphoresis, and nausea. Troponin I elevated at 5.2 ng/mL. ECG shows ST-segment elevation in leads II, III, aVF. | Heart Disease | 0.99 | STEMI presentation with biomarker confirmation
+Persistent wheezing and nocturnal dyspnea for 6 weeks. Peak flow variability >20%. Mild eosinophilia on CBC. Partial response to albuterol. | Asthma | 0.85 | Classic asthma symptoms without full workup
+eGFR 48 mL/min/1.73m² sustained over 3 tests. Urinalysis shows 2+ proteinuria. BP 150/92 mmHg. No hematuria. | Kidney Disease | 0.82 | Stage 3 CKD by eGFR with proteinuria
+
+# Medium Confidence Disease Cases (60-89%)
+Fatigue and increased thirst. Random glucose 145 mg/dL. No ketones in urine. Overweight but no family history of diabetes. | Diabetes | 0.68 | Borderline glucose with symptoms but not diagnostic
+Occasional chest tightness with exertion. Stress ECG shows 1mm ST depression in anterior leads at 85% max HR. Lipid panel normal. | Heart Disease | 0.65 | Atypical chest pain with equivocal stress test
+Mild shortness of breath during pollen season. No wheezing on exam. Normal spirometry. | Asthma | 0.55 | Possible allergic symptoms without confirmation
+Creatinine 1.3 mg/dL (baseline 1.0). No proteinuria. BP 128/80. Recent NSAID use. | Kidney Disease | 0.45 | Mild creatinine elevation likely secondary to NSAIDs
+
+# High Confidence No Disease Cases (90-100%)
+Annual physical exam. No complaints. All labs within normal limits including CBC, CMP, lipid panel. BMI 23. Exercises regularly. | No Disease | 0.97 | Completely normal findings in healthy individual
+20yo male with 1 day of viral URI symptoms. Temp 99.1°F, lungs clear. No chronic medical conditions. | No Disease | 0.95 | Acute self-limited illness
+
+# Borderline Cases (40-59%)
+Occasional heartburn after spicy foods. No alarm symptoms. Normal EGD 1 year ago. Takes antacids PRN. | No Disease | 0.85 | Mild GERD without complications
+BP 132/84 at screening. No other risk factors. Home readings average 128/82. No end-organ damage. | No Disease | 0.8 | Borderline BP without hypertension diagnosis
+Fatigue and joint pain. ANA weakly positive 1:40. No specific autoantibodies. ESR normal. | No Disease | 0.55 | Non-specific symptoms with equivocal lab
+Occasional PVCs on Holter (3%). Normal echo. Mild caffeine use. No structural heart disease. | No Disease | 0.6 | Benign arrhythmia without pathology
+
+# Challenging Cases with Conflicting Indicators
+Former smoker with chronic cough but normal CXR and spirometry. No weight loss or hemoptysis. | No Disease | 0.7 | Symptoms without objective findings
+BMI 28, acanthosis nigricans noted. Fasting glucose 110 mg/dL. No other metabolic markers. | Diabetes | 0.75 | Prediabetes with skin markers
+Patient reports 3 month history of fatigue. TSH 5.8 mIU/L (normal 0.5-4.5). Free T4 normal. No goiter. | No Disease | 0.65 | Subclinical hypothyroidism
+45yo female with atypical chest pain. Normal coronary CTA. Positive family history for CAD. | No Disease | 0.6 | Non-cardiac chest pain
+
+# Emergency Cases
+30yo with Kussmaul breathing, glucose 480 mg/dL, pH 7.18, ketones large. | Diabetes | 0.99 | Diabetic ketoacidosis
+72yo with sudden onset slurred speech and right facial droop. NIHSS 12. CT shows left MCA ischemic stroke. | Heart Disease | 0.98 | Cardioembolic stroke
+Acute shortness of breath with diffuse wheezing. O2 sat 88% on RA. No prior asthma history. | Asthma | 0.9 | New onset asthma with acute exacerbation
+Anuria for 24 hours. Creatinine 8.2 mg/dL. K+ 6.8 mEq/L. Echo shows pericardial effusion. | Kidney Disease | 0.97 | Acute kidney injury with complications
+
+# Pediatric Cases
+7yo with recurrent wheezing episodes triggered by URIs. Improved with albuterol. No atopy. | Asthma | 0.75 | Viral-induced wheezing
+15yo with polyuria/polydipsia. Glucose 320 mg/dL. pH normal. No ketones. | Diabetes | 0.95 | New onset type 1 diabetes
+2yo with fever and 1 episode of wheezing. Normal CXR. RSV positive. | No Disease | 0.8 | Bronchiolitis
