@@ -76,7 +76,7 @@ disease_labels = {
 
 # Load model and tokenizer
 tokenizer = BertTokenizer.from_pretrained("dmis-lab/biobert-base-cased-v1.1")
-model = BertForSequenceClassification.from_pretrained('D:/java/nlp/ad/advMAI/fine_tuned_biobert')
+model = BertForSequenceClassification.from_pretrained('./fine_tuned_biobert')
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 model.to(device)
